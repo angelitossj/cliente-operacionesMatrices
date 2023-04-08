@@ -5,9 +5,14 @@ const Suma = () => {
     // defino los estados iniciales para las matrices y los resultados
     const [matriz1, setMatriz1] = useState([]);
     const [matriz2, setMatriz2] = useState([]);
-    const [resultadoSuma, setResultadoSuma] = useState([]);
-    const [resultadoResta, setResultadoResta] = useState([]);
-    const [resultadoMultiplicacion, setMultiplicacion] = useState([]);
+    const [result, setResult] = useState({
+      resultadoSuma:[],
+      resultadoResta:[],
+      resultadoMultiplicacion:[],
+
+    });
+
+
   
     // Función que permite crear una matriz a partir de la entrada del usuario
     const crearMatriz = (boton) => {
@@ -35,6 +40,8 @@ const Suma = () => {
     // Función que se encarga de enviar la petición al servidor para realizar la suma de las matrices
     const mandarPeticion = async () => {
       const data = { matriz1, matriz2 };
+
+      
       
       // Verifica que ambas matrices tengan las mismas dimensiones
       if(matriz1.length !== matriz2.length) {
@@ -48,8 +55,10 @@ const Suma = () => {
           };
           const response = await fetch('http://localhost:3000/sumar', requestOptions);
           const resultadito = await response.json();
-          setResultadoSuma(resultadito);
-          console.log(resultadito);
+      
+            setResult({...result, resultadoSuma: resultadito})
+          console.log(result)
+          
       }
     };
   const mandarPeticionResta = async () => {
@@ -67,8 +76,10 @@ const Suma = () => {
       };
       const response = await fetch('http://localhost:3000/restar', requestOptions);
       const resultadoResta = await response.json();
-      setResultadoResta(resultadoResta);
-      console.log(resultadoResta)
+     
+      setResult({...result, resultadoResta:resultadoResta})
+      console.log(result)
+     
     }
    
   };
@@ -89,8 +100,9 @@ const Suma = () => {
       };
       const response = await fetch('http://localhost:3000/multiplicar', requestOptions);
       const resultadoMultiplicacion = await response.json();
-      setMultiplicacion(resultadoMultiplicacion);
-      console.log(resultadoMultiplicacion)
+     await setResult({...result, resultadoMultiplicacion:resultadoMultiplicacion})
+     
+    console.log(result)
 
 
     }
@@ -98,9 +110,7 @@ const Suma = () => {
 
   };
         useEffect(()=>{
-mandarPeticion,
-mandarPeticionResta,
-mandarMultiplicacion
+
         },[])
   return (
     <>
@@ -142,7 +152,7 @@ mandarMultiplicacion
         <h2>resultado Suma</h2>
         <Table striped bordered hover variant="dark" >
           <tbody>
-            {resultadoSuma.map((fila, i) => (
+            {result.resultadoSuma.map((fila, i) => (
               <tr key={i}>
                 {fila.map((valor, j) => (
                   <td key={j}>{valor}</td>
@@ -154,7 +164,7 @@ mandarMultiplicacion
         <h2>Resultado Resta</h2>
         <Table striped bordered hover variant="dark" >
           <tbody>
-            {resultadoResta.map((fila, i) => (
+            {result.resultadoResta.map((fila, i) => (
               <tr key={i}>
                 {fila.map((valor, j) => (
                   <td key={j}>{valor}</td>
@@ -166,7 +176,7 @@ mandarMultiplicacion
         <h2>Resultado Multiplicacion</h2>
         <Table striped bordered hover variant="dark" >
           <tbody>
-            {resultadoMultiplicacion.map((fila, i) => (
+            {result.resultadoMultiplicacion.map((fila, i) => (
               <tr key={i}>
                 {fila.map((valor, j) => (
                   <td key={j}>{valor}</td>
